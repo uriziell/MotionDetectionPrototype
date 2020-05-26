@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row">
+      <button (click)="pause()" class="btn btn-warning">Pause</button>
+      <button (click)="resume()" class="btn btn-info">Resume</button>
+      <button (click)="sound()" class="btn btn-danger">Sound</button>
+      <!-- <input (keyup)="setVideoHight($event)" value="640">
+      <input (keyup)="setVideoWidth($event)" value="480"> -->
+    </div>
+  
+    <div class="row">
+      <div class="col-md-12">
+        <div class="both" *ngIf="isPlaying">
+            <canvas id="canvas" width="640" height="480" #myCanvas></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <video id="videoElement" #videoElement></video>

@@ -1,0 +1,25 @@
+body {
+    background-color: #F0F0F0;
+}
+#app {
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+}
+
+.both {
+    margin-top: 10px;
+    background-color: #ccc;
+    border: 10px;
+    width: 640px;
+    height: 480px;
+}
+
+#videoElement {
+    visibility: hidden;
+}
+
+li {
+    display: inline;
+    padding: 5px;
+}
