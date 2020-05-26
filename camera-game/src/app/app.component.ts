@@ -43,12 +43,7 @@ export class AppComponent {
   draw(canvas : ElementRef<HTMLCanvasElement>, video : any, appContext :any) {
     var $this = this; //cache
     var ctx = canvas.nativeElement.getContext("2d");
-    // if(appContext.videoWidth == 0 || appContext.videoHight == 0)
-    // {
-    //   appContext.videoWidth = 640;
-    //   appContext.videoHight = 480;
 
-    // }
     (function loop() {
       if(ctx!== null && ctx!== undefined)
         {       
@@ -96,23 +91,38 @@ export class AppComponent {
 
   getImageData(canvasContext : CanvasRenderingContext2D){
 
-    for(let i = 0; i< this.videoWidth; i++)
+    for(let i = 0; i< this.videoWidth; i+=5)
     {
-      for(let j = 0; j< this.videoHight; j++)
+      for(let j = 0; j< this.videoHight; j+=5)
       {
-        var pixelData = canvasContext.getImageData(i,j,1,1).data;
-        if(pixelData[0] >= 165 && pixelData[0] <  255
-          && pixelData[1] >= 30 && pixelData[1] < 80
-          && pixelData[2] >= 30 && pixelData[2] < 80)
-          {
-            console.log("i: " + i + "j: " + j);
+        var pixelData = canvasContext.getImageData(i,j,5,5).data;
+        if(this.checkPixel(pixelData))
+        {
+          canvasContext.fillRect(i, j, 20, 20);
+          return;
+        }
+        // if(pixelData[0] >= 165 && pixelData[0] <  255
+        //   && pixelData[1] >= 30 && pixelData[1] < 80
+        //   && pixelData[2] >= 30 && pixelData[2] < 80)
+        //   {
+        //     console.log("i: " + i + "j: " + j);
 
-            canvasContext.fillRect(i, j, 20, 20);
+        //     canvasContext.fillRect(i, j, 20, 20);
 
-            return;
-          }
+        //     return;
+        //   }
       }
     }
+  }
 
+  checkPixel(pixel : Uint8ClampedArray) : boolean {
+    for(let i = 0; i< pixel.length - 10; i+=4)
+    {
+      if(pixel[i] >= 165 && pixel[i] <  255 )
+        if(pixel[i+1] >= 30 && pixel[i+1] < 80)
+          if(pixel[i+2] >= 30 && pixel[i+2] < 80)
+           return true;        
+    }
+    return false;
   }
 }

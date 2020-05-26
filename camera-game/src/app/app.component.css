@@ -12,6 +12,10 @@ body {
     border: 10px;
 }
 
+#videoElement {
+    visibility: hidden;
+}
+
 li {
     display: inline;
     padding: 5px;
