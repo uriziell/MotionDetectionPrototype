@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input } from '@angular/core';
 import { ViewChild, AfterViewInit } from '@angular/core';
+import { CameraService } from '../services/camera.service';
 
 @Component({
   selector: 'camera-detection',
@@ -18,6 +19,10 @@ export class CameraDetectionComponent implements AfterViewInit {
   displayControls = true;
   videoWidth = 640;
   videoHight = 480;
+
+  constructor(private _cameraService: CameraService) {
+
+  }
 
   ngAfterViewInit(): void {
     if(this.isPlaying)
@@ -49,6 +54,7 @@ export class CameraDetectionComponent implements AfterViewInit {
 
   start() {
     // this.initCamera({ video: true, audio: false });
+    this._cameraService.Test();
     this.initCamera({ video: true, audio: false });
     var ctx = this.context;
     var appContext = this;
@@ -95,7 +101,7 @@ export class CameraDetectionComponent implements AfterViewInit {
         var pixelData = canvasContext.getImageData(i,j,5,5).data;
         if(this.checkPixel(pixelData))
         {
-          canvasContext.fillRect(i, j, 20, 20);
+          canvasContext.fillRect(i, j, 100, 50);
           return;
         }
       }
