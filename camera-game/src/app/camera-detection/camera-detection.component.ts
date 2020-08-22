@@ -56,7 +56,7 @@ export class CameraDetectionComponent implements AfterViewInit {
     this._cameraService.Test();
     this.initCamera({ video: true, audio: false });
     var appContext = this;
-    this.video.addEventListener('play', this.draw(this.canvas, this.video, appContext), false);
+    this.video.addEventListener('play', this._canvasService.draw(this.canvas, this.video, appContext), false);
   }
 
   pause() {

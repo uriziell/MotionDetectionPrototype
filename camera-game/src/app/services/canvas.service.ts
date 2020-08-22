@@ -1,10 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CanvasService {
    
+   public draw(canvas : ElementRef<HTMLCanvasElement>, video : any, appContext :any) {
+        var ctx = canvas.nativeElement.getContext("2d");
+    
+        (function loop() {
+          if(ctx!== null && ctx!== undefined)
+            {       
+              ctx.drawImage(video, 0, 0, 640, 480);
+              appContext._canvasService.getImageData(ctx, 480, 640);
+            }
+            setTimeout(loop, 1000 / 10); // drawing at 30fps    
+        })();
+      }
+
     public getImageData(canvasContext : CanvasRenderingContext2D, videoHight : number, videoWidth : number){
   
       for(let i = 0; i< videoWidth; i+=5)
@@ -19,7 +32,7 @@ export class CanvasService {
           }
         }
       }
-    }
+    }   
 
     private checkPixel(pixel : Uint8ClampedArray) : boolean {
         for(let i = 0; i< pixel.length - 10; i+=4)
