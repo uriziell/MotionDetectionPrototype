@@ -26,5 +26,4 @@ video:any;
       video.play();
     });
   }
-
 }
