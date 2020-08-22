@@ -45,7 +45,7 @@ export class CameraDetectionComponent implements AfterViewInit {
       if(ctx!== null && ctx!== undefined)
         {       
           ctx.drawImage(video, 0, 0, 640, 480);
-          appContext.getImageData(ctx);
+          appContext._canvasService.getImageData(ctx, 480, 640);
         }
         setTimeout(loop, 1000 / 10); // drawing at 30fps    
     })();
@@ -79,21 +79,5 @@ export class CameraDetectionComponent implements AfterViewInit {
   initCamera(config:any) {
     this.video = this.videoElement.nativeElement;
     this._cameraService.InitCamera(config,this.video);
-  }
-
-  getImageData(canvasContext : CanvasRenderingContext2D){
-
-    for(let i = 0; i< this.videoWidth; i+=5)
-    {
-      for(let j = 0; j< this.videoHight; j+=5)
-      {
-        var pixelData = canvasContext.getImageData(i,j,5,5).data;
-        if(this._canvasService.checkPixel(pixelData))
-        {
-          canvasContext.fillRect(i, j, 100, 50);
-          return;
-        }
-      }
-    }
   } 
 }
