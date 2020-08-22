@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input } from '@angular/core';
 import { ViewChild, AfterViewInit } from '@angular/core';
 import { CameraService } from '../services/camera.service';
+import { CanvasService } from '../services/canvas.service';
 
 @Component({
   selector: 'camera-detection',
@@ -20,7 +21,7 @@ export class CameraDetectionComponent implements AfterViewInit {
   videoWidth = 640;
   videoHight = 480;
 
-  constructor(private _cameraService: CameraService) {
+  constructor(private _cameraService: CameraService, private _canvasService: CanvasService) {
 
   }
 
@@ -36,10 +37,8 @@ export class CameraDetectionComponent implements AfterViewInit {
   setVideoWidth(event : any) {
     this.videoWidth = event.target.value;
   }
-
   
   draw(canvas : ElementRef<HTMLCanvasElement>, video : any, appContext :any) {
-    var $this = this; //cache
     var ctx = canvas.nativeElement.getContext("2d");
 
     (function loop() {
@@ -56,7 +55,6 @@ export class CameraDetectionComponent implements AfterViewInit {
     // this.initCamera({ video: true, audio: false });
     this._cameraService.Test();
     this.initCamera({ video: true, audio: false });
-    var ctx = this.context;
     var appContext = this;
     this.video.addEventListener('play', this.draw(this.canvas, this.video, appContext), false);
   }
@@ -79,17 +77,8 @@ export class CameraDetectionComponent implements AfterViewInit {
   }
 
   initCamera(config:any) {
-    var browser = <any>navigator;
     this.video = this.videoElement.nativeElement;
-    browser.getUserMedia = (browser.getUserMedia ||
-      browser.webkitGetUserMedia ||
-      browser.mozGetUserMedia ||
-      browser.msGetUserMedia);
-
-    browser.mediaDevices.getUserMedia(config).then(stream => {
-      this.video.srcObject = stream;
-      this.video.play();
-    });
+    this._cameraService.InitCamera(config,this.video);
   }
 
   getImageData(canvasContext : CanvasRenderingContext2D){
@@ -99,23 +88,12 @@ export class CameraDetectionComponent implements AfterViewInit {
       for(let j = 0; j< this.videoHight; j+=5)
       {
         var pixelData = canvasContext.getImageData(i,j,5,5).data;
-        if(this.checkPixel(pixelData))
+        if(this._canvasService.checkPixel(pixelData))
         {
           canvasContext.fillRect(i, j, 100, 50);
           return;
         }
       }
     }
-  }
-
-  checkPixel(pixel : Uint8ClampedArray) : boolean {
-    for(let i = 0; i< pixel.length - 10; i+=4)
-    {
-      if(pixel[i] >= 165 && pixel[i] <  255 )
-        if(pixel[i+1] >= 30 && pixel[i+1] < 80)
-          if(pixel[i+2] >= 30 && pixel[i+2] < 80)
-           return true;        
-    }
-    return false;
-  }
+  } 
 }
